@@ -4,16 +4,17 @@
     border: 1px solid black;
     border-radius: 3px;
     margin-bottom: 30px;
+    margin-top: 20px;
     width: 100%;
-    max-width: 250px;
+    min-width: 300px;
     gap: 20px;
-    padding: 20px;
+    padding: 30px;
   }
   
   .item {
     display: flex;
     flex-direction: column;
-    gap: 3px;
+    gap: 6px;
   }
   
   .inputLabel {
@@ -21,12 +22,12 @@
   }
   
   .inputItem {
-    height: 24px;
+    height: 30px;
     border: 1px solid grey;
     border-radius: 3px;
     font-size: 14px;
-    color: darkred;
     outline: transparent;
+    color: darkred;
     padding: 5px;
   }
   
@@ -38,7 +39,7 @@
     border: 1px solid black;
     border-radius: 3px;
     background-color: white;
-    max-width: 115px;
+    min-width: 100px;
     height: 30px;
     font-size: 17px;
     margin: 0 auto;

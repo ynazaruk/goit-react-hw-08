@@ -1,4 +1,14 @@
-.authNav {
+.logContainer {
     display: flex;
-    gap: 10px;
-}
+    gap: 30px;
+  }
+  .link {
+    color: black;
+    font-size: 20px;
+  }
+  
+  .active,
+  .link:hover {
+    text-decoration: underline;
+    color: darkred;
+  }

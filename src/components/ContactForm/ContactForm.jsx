@@ -1,33 +1,60 @@
+import { useDispatch } from "react-redux";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import { addContact } from "../../redux/contacts/operations";
+import toast, { Toaster } from 'react-hot-toast';
+import * as Yup from "yup";
+import css from "./ContactForm.module.css";
 
+export default function ContactForm() {
+    const dispatch = useDispatch();
 
-import { useDispatch } from 'react-redux';
-import { addContact } from '../../redux/contacts/operations';
-import css from './ContactForm.module.css';
+    const handleSubmit = async (values, actions) => {
+        const newContact = {
+            name: values.username,
+            number: values.number,
+        };
+        try {
+            await dispatch(addContact(newContact)).unwrap();
+            toast.success("Successfully added!");
+            actions.resetForm();
+        } catch (error) {
+            toast.error("Failed to add contact");
+        }
+    };
 
-const ContactForm = () => {
-  const dispatch = useDispatch();
+    const FeedbackSchema = Yup.object().shape({
+        username: Yup.string().min(3, "Too Short!").max(50, "Too Long!").required("*Required"),
+        number: Yup.string().min(2, "Too Short!").max(50, "Too Long!").required("*Required"),
+    });
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+    return (
+        <Formik
+            initialValues={{ username: "", number: "" }}
+            onSubmit={handleSubmit}
+            validationSchema={FeedbackSchema}
+        >
+            <Form className={css.container}>
+                <div className={css.item}>
+                    <label className={css.inputLabel}>Name</label>
+                    <Field className={css.inputItem} type="text" name="username" />
+                    <ErrorMessage className={css.error} name="username" component="span" />
+                </div>
 
-    const name = event.target.elements.name.value;
-    const number = event.target.elements.number.value;
+                <div className={css.item}>
+                    <label className={css.inputLabel}>Number</label>
+                    <Field className={css.inputItem} type="text" name="number" />
+                    <ErrorMessage className={css.error} name="number" component="span" />
+                </div>
 
-    if (name && number) {
-      dispatch(addContact({ name, number }));
-      event.target.reset(); 
-    } else {
-      console.error('Name and number are required');
-    }
-  };
-
-  return (
-    <form onSubmit={handleSubmit} className={css.form}>
-      <input type="text" name="name" placeholder="Name" required />
-      <input type="tel" name="number" placeholder="Phone Number" required />
-      <button type="submit">Add Contact</button>
-    </form>
-  );
-};
-
-export default ContactForm;
+                <button className={css.btn} type="submit">Add contact</button>
+                <Toaster toastOptions={{
+                    style: {
+                        display: "flex",
+                        marginTop: "70px"
+                    },
+                }}
+                />
+            </Form>
+        </Formik>
+    );
+}

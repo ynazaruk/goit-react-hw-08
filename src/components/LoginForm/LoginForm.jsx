@@ -1,47 +1,43 @@
-import React from'react';
-import { useDispatch } from'react-redux';
-import { login } from'../../redux/auth/operations';
-import { useFormik } from'formik';
-import * as Yup from'yup';
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import { useDispatch } from "react-redux";
+import { logIn } from "../../redux/auth/operations";
+import * as Yup from "yup";
+import css from "./LoginForm.module.css"
 
-const LoginForm = () => {
-  const dispatch = useDispatch();
-  const formik = useFormik({
-    initialValues: {
-      email: '',
-      password: '',
-    },
-    validationSchema: Yup.object({
-      email: Yup.string().email('Invalid email address').required('Required'),
-      password: Yup.string().required('Required'),
-    }),
-    onSubmit: (values) => {
-      console.log('Form values:', values);
-      dispatch(login(values)); 
-    },
-  });
+export default function LoginForm() {
+    const dispatch = useDispatch()
+    const handleSubmit = (values, actions) => {
+        dispatch(logIn(values));
+        actions.resetForm();
+    };
 
-  return (
-    <form onSubmit={formik.handleSubmit}><label htmlFor="email">Email</label><input
-        id="email"
-        name="email"
-        type="email"
-        onChange={formik.handleChange}
-        value={formik.values.email}
-      />
-      {formik.errors.email ? <div>{formik.errors.email}</div> : null}
+    const FeedbackSchema = Yup.object().shape({
+        email: Yup.string().min(2, "Too Short!").max(50, "Too Long!").required("*Required"),
+        password: Yup.string().min(8, "Too Short!").max(50, "Too Long!").required("*Required"),
+    });
 
-      <label htmlFor="password">Password</label><input
-        id="password"
-        name="password"
-        type="password"
-        onChange={formik.handleChange}
-        value={formik.values.password}
-      />
-      {formik.errors.password ? <div>{formik.errors.password}</div> : null}
+    return (
+        <Formik
+            initialValues={{ email: "", password: "" }}
+            onSubmit={handleSubmit}
+            validationSchema={FeedbackSchema}
+        >
+            <Form className={css.container} autoComplete="off">
+                <div className={css.item}>
+                    <label className={css.inputLabel}>Email</label>
+                    <Field className={css.inputItem} type="text" name="email" />
+                    <ErrorMessage className={css.error} name="email" component="span" />
+                </div>
 
-      <button type="submit">Login</button></form>
-  );
-};
+                <div className={css.item}>
+                    <label className={css.inputLabel}>Password</label>
+                    <Field className={css.inputItem} type="text" name="password" placeholder="min 8 symbols" />
+                    <ErrorMessage className={css.error} name="password" component="span" />
+                </div>
 
-export default LoginForm;
+                <button className={css.btn} type="submit">Log in</button>
+            </Form>
+        </Formik>
+    );
+
+}

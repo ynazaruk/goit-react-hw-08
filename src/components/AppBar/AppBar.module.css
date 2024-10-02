@@ -1,23 +1,8 @@
-.appBar {
-    background-color: #282c34;
-    padding: 10px;
-    color: white;
+.container {
     display: flex;
     justify-content: space-between;
+    padding: 30px;
+    box-shadow: 0 8px 8px rgba(0, 0, 0, 0.1);
+    height: 50px;
     align-items: center;
-}
-
-.nav {
-    display: flex;
-    gap: 20px;
-}
-
-.navLink {
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-.navLink:hover {
-    text-decoration: underline;
-}
+  }

@@ -1,32 +1,31 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
-import { deleteContact } from '../../redux/contacts/operations';
-import Button from '@mui/material/Button';
 
-const Contact = ({ id, name, number }) => {
-  const dispatch = useDispatch();
+import { useDispatch } from "react-redux";
+import toast, { Toaster } from 'react-hot-toast';
+import { deleteContact } from "../../redux/contacts/operations"
+import css from "./Contact.module.css"
 
-  const handleDelete = () => {
-    if (window.confirm(`Are you sure you want to delete ${name}?`)) {
-      dispatch(deleteContact(id));
+export default function Contact({ name, number, id }) {
+    const dispatch = useDispatch()
+
+    const delContact = () => {
+        dispatch(deleteContact(id))
+        toast.success("Successfully deleted!")
     }
-  };
 
-  return (
-    <li>
-      <p>{name}: {number}</p>
-      <Button variant="contained" color="secondary" onClick={handleDelete}>
-        Delete
-      </Button>
-    </li>
-  );
-};
-
-Contact.propTypes = {
-  id: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  number: PropTypes.string.isRequired,
-};
-
-export default Contact;
+    return (
+        <div className={css.container}>
+            <div className={css.info}>
+                <p>{name}</p>
+                <p>{number}</p>
+            </div>
+            <button className={css.btn} onClick={delContact}>Delete</button>
+            <Toaster toastOptions={{
+                style: {
+                    display: "flex",
+                    marginTop: "70px"
+                },
+            }}
+            />
+        </div>
+    )
+}
